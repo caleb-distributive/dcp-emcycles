@@ -36,6 +36,8 @@
 
 #include "cycles_xml.h"
 
+#include <emscripten.h>
+
 #undef function_bind
 #define function_bind(x) (x)
 
@@ -72,30 +74,30 @@ struct Options {
 	bool quiet;
 } options;
 
-static void session_print(const string& str)
-{
-  printf(">>> %s\n", str.c_str());
-  return;
-}
+// static void session_print(const string& str)
+// {
+//   printf(">>> %s\n", str.c_str());
+//   return;
+// }
 
-static void session_print_status()
-{
-	int sample;
-	double total_time, sample_time;
-	string status, substatus;
-
-	/* get status */
-	options.session->progress.get_sample(sample, total_time, sample_time);
-	options.session->progress.get_status(status, substatus);
-
-	if(substatus != "")
-		status += ": " + substatus;
-
-	/* print status */
-	status = string_printf("Sample %d   %s", sample, status.c_str());
-	//status = "Sample";
-	session_print(status);
-}
+// static void session_print_status()
+// {
+// 	int sample;
+// 	double total_time, sample_time;
+// 	string status, substatus;
+// 
+// 	/* get status */
+// 	options.session->progress.get_sample(sample, total_time, sample_time);
+// 	options.session->progress.get_status(status, substatus);
+// 
+// 	if(substatus != "")
+// 		status += ": " + substatus;
+// 
+// 	/* print status */
+// 	status = string_printf("Sample %d   %s", sample, status.c_str());
+// 	//status = "Sample";
+// 	session_print(status);
+// }
 
 static BufferParams& session_buffer_params()
 {
@@ -117,7 +119,7 @@ static void session_init()
 	options.session->scene = options.scene;
 	
 	if(options.session_params.background && !options.quiet)
-		options.session->progress.set_update_callback(function_bind(&session_print_status));
+		//options.session->progress.set_update_callback(function_bind(&session_print_status));
 	//else
 	  //options.session->progress.set_update_callback(function_bind(&view_redraw));
 
@@ -216,6 +218,7 @@ void keyboard(unsigned char key)
 		options.session->progress.set_cancel("Cancelled");
 }
 
+/*
 static int files_parse(int argc, const char *argv[])
 {
 	if(argc > 0)
@@ -223,12 +226,13 @@ static int files_parse(int argc, const char *argv[])
 
 	return 0;
 }
+*/
 
-static void options_parse(int argc, const char **argv)
+static void options_parse(/*int argc, const char **argv*/)
 {
 	options.width= 0;
 	options.height= 0;
-	options.filepath = "elephant.xml";
+	options.filepath = "scene.xml";
 	options.session = NULL;
 	options.quiet = false;
 
@@ -350,44 +354,28 @@ static void options_parse(int argc, const char **argv)
 
 void draw_out(char *mem, int w, int h, int pix) {
   printf("draw_out %d %d %d!\n", w, h, pix);
-  for (int yy = 0; yy < h; yy++) {
-    printf("993 ");
-    char *src = mem + ((h-yy-1)*w*4);
-    for (int xx = 0; xx < w; xx++) {
-      printf("%d ", (unsigned char)src[0]);
-      printf("%d ", (unsigned char)src[1]);
-      printf("%d ", (unsigned char)src[2]);
-      printf("(%d) ", (unsigned char)src[3]);
-      src += 4;
-    }
-    printf("\n");
-  }
-  printf("999 \n");
+  char buf[1000];
+  sprintf(buf,"out.ppm");
 
-#ifndef EMCYCLES_JS
-  // can't do this from javascript!
-	static int ct = 0;
-	char buf[1000];
-	sprintf(buf,"test_%06d.ppm",ct);
-	ct++;
-	FILE *fp = fopen(buf, "wb");
-	if (!fp) {
-	  printf("cannot open file for writing\n");
-	  return;
-        } else {
-	  const int inc = w*4;
-	  fprintf(fp, "P6\n%d %d\n%d\n", w, h, 255);
-	  for (int yy = 0; yy < h; yy++) {
-	    char *src = (char *)mem + ((h-yy-1)*w*4);
-	    for (int xx = 0; xx < w; xx++) {
-	      fwrite((void *) src, 1, (size_t) (3), fp);
-	      src += 4;
-	    }
-	  }
-	  fclose(fp);
-        }
-	printf("wrote to %s (hacked in %s)\n", buf, __FILE__);
-#endif
+  FILE *fp = fopen(buf, "wb");
+  if (!fp) {
+    printf("cannot open file for writing\n");
+    return;
+  } else {
+    printf("started writing!\n");
+    const int inc = w*4;
+    fprintf(fp, "P6\n%d %d\n%d\n", w, h, 255);
+    for (int yy = 0; yy < h; yy++) {
+      char *src = (char *)mem + ((h-yy-1)*w*4);
+      for (int xx = 0; xx < w; xx++) {
+        fwrite((void *) src, 1, (size_t) (3), fp);
+        src += 4;
+      }
+    }
+    fclose(fp);
+  }
+
+  printf("wrote to %s (hacked in %s)\n", buf, __FILE__);
 }
 
 CCL_NAMESPACE_END
@@ -401,45 +389,31 @@ int main(int argc, const char **argv)
   SDL_Init(SDL_INIT_VIDEO);
 #endif
 
+  EM_ASM_INT({
+    console.time('program');
+  }, 0);
 
 	path_init("../build/bin/2.59/scripts/addons/cycles/");
 
-	options_parse(argc, argv);
+	options_parse(/*argc, argv*/);
 
 	options.session_params.background = true;
 	options.session_params.threads = 1;
-	if(options.session_params.background) {
-		session_init();
-		options.session->tonemap();
-		options.session->wait();
-		if (options.session->draw(session_buffer_params())) {
-		  printf("Got image\n");
-		}
-		session_exit();
-	}
-	else {
-	  printf("HELLO!\n");
-		string title = "Cycles: " + path_filename(options.filepath);
 
-		/* init/exit are callback so they run while GL is initialized */
-		//view_main_loop(title.c_str(), options.width, options.height,
-		//	       session_init, 
-		//	       session_exit, resize, display, keyboard);
-		printf("initing\n");
-		session_init();
-		printf("inited\n");
-		//options.session->run();
-		options.session->wait();
-		if (options.session->draw(session_buffer_params())) {
-		  printf("Got image\n");
-		}
-		session_exit();
-	}
+        session_init();
+        options.session->tonemap();
+        options.session->wait();
+        if (options.session->draw(session_buffer_params())) {
+          printf("Got image!\n");
+        }
+        session_exit();
 
 #ifdef USE_SDL
   SDL_Quit();
 #endif
-
+  EM_ASM_INT({
+    console.timeEnd('program')
+  }, 0);
 	return 0;
 }
 
