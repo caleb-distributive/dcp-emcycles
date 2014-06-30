@@ -41,8 +41,8 @@ Camera::Camera()
 	nearclip = 1e-5f;
 	farclip = 1e5f;
 
-	width = 1024;
-	height = 512;
+	width = 100;
+	height = 100;
 
 	left = -((float)width/(float)height);
 	right = (float)width/(float)height;
