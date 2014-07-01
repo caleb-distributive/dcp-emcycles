@@ -353,9 +353,16 @@ static void options_parse(/*int argc, const char **argv*/)
 }
 
 void draw_out(char *mem, int w, int h, int pix) {
-  printf("draw_out %d %d %d!\n", w, h, pix);
+  /*
   char buf[1000];
   sprintf(buf,"out.ppm");
+  */
+
+  EM_ASM_INT({
+    Module['draw_out']($0, $1, $2, $3);
+  }, mem, w, h, pix);
+
+  /*
 
   FILE *fp = fopen(buf, "wb");
   if (!fp) {
@@ -376,6 +383,8 @@ void draw_out(char *mem, int w, int h, int pix) {
   }
 
   printf("wrote to %s (hacked in %s)\n", buf, __FILE__);
+
+  */
 }
 
 CCL_NAMESPACE_END
@@ -403,6 +412,7 @@ int main(int argc, const char **argv)
         session_init();
         options.session->tonemap();
         options.session->wait();
+
         if (options.session->draw(session_buffer_params())) {
           printf("Got image!\n");
         }

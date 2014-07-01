@@ -11,5 +11,5 @@ cp bin/cycles_test cycles_test.bc && emcc lib/libcycles_kernel.so lib/libcycles_
 
 popd
 
-cp js_build/cycles_test.js ./cloudrender_core.js
+cat cloudrender_init.js js_build/cycles_test.js cloudrender_close.js > ./cloudrender_core.js
 
