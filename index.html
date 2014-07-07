@@ -7,10 +7,17 @@
 
     worker.onmessage = function (ev) {
         var clampArr = new Uint8ClampedArray(ev.data.image)
-        var img = new ImageData(clampArr, ev.data.w, ev.data.h, ev.data.pix)
         canvas.width = ev.data.w;
         canvas.height = ev.data.h;
         var ctx = canvas.getContext('2d')
+        try{
+            var img = new ImageData(clampArr, ev.data.w, ev.data.h, ev.data.pix)
+        }catch(e) {
+            // Chrome doesn't have an ImageData constructor
+            var img = ctx.createImageData(ev.data.w, ev.data.h)
+            for(var i=0; i < clampArr.length; i++)
+                img.data[i]=clampArr[i]
+        }
         ctx.putImageData(img, 0, 0)
     }
 </script>
