@@ -1,45 +1,48 @@
 
-(function (SCENE, INCLUDES) {
+if (typeof Module !== 'undefined') var outerModule = Module
 
-Module = {
-    noInitialRun: true,
-    preInit: function () {
-        var toDo = INCLUDES.length
-        function tryDone() {
-            toDo--;
-            if (!toDo) Module._main();
-        }
+;(function (SCENE, INCLUDES) {
 
-        if (/\.xml$/.test(SCENE)) {
-            toDo++
-            load(SCENE, function () {
-                FS.writeFile('scene.xml', this.responseText)
-                tryDone()
-            })
-        } else {
-            FS.writeFile('scene.xml', SCENE)
-        }
+Module = outerModule || {}  // It's defined again, by emscripten code
 
-        INCLUDES.forEach(function (include) {
-            load(include, function () {
-                FS.writeFile(include, this.responseText)
-                tryDone()
-            })
+Module.noInitialRun = true
+Module.preInit = function () {
+    var toDo = INCLUDES.length
+    function tryDone() {
+        toDo--;
+        if (!toDo) Module._main();
+    }
+
+    if (/\.xml$/.test(SCENE)) {
+        toDo++
+        load(SCENE, function () {
+            FS.writeFile('scene.xml', this.responseText)
+            tryDone()
         })
-    },
+    } else {
+        FS.writeFile('scene.xml', SCENE)
+    }
 
-    draw_out: function (mem, w, h, pix) {
-        Module.imageData = Module.HEAPU8.subarray(mem, mem + (w * h * 4));
-        postMessage({
-            image: Module.imageData,
-            w: w,
-            h: h,
-            pix: pix
-        });
-    },
-
-    TOTAL_MEMORY: 256 * 1024 * 1024 // 64mb
+    INCLUDES.forEach(function (include) {
+        load(include, function () {
+            FS.writeFile(include, this.responseText)
+            tryDone()
+        })
+    })
 }
+
+Module.draw_out = Module.draw_out || function (mem, w, h, pix) {
+    console.log('draw_out!')
+    Module.imageData = Module.HEAPU8.subarray(mem, mem + (w * h * 4));
+    postMessage({
+        image: Module.imageData,
+        w: w,
+        h: h,
+        pix: pix
+    });
+}
+
+Module.TOTAL_MEMORY = 256 * 1024 * 1024 // 64mb
 
 function load(url, cb) {
     var xhr = new XMLHttpRequest()
