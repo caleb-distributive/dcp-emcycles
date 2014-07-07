@@ -1,22 +1,24 @@
 
-(function () {
-
-SCENE = 'elephant.xml'
-INCLUDES = ['gumbo.xml']
+(function (SCENE, INCLUDES) {
 
 Module = {
     noInitialRun: true,
     preInit: function () {
-        var toDo = INCLUDES.length + 1
+        var toDo = INCLUDES.length
         function tryDone() {
             toDo--;
             if (!toDo) Module._main();
         }
 
-        load(SCENE, function () {
-            FS.writeFile('scene.xml', this.responseText)
-            tryDone()
-        })
+        if (/\.xml$/.test(SCENE)) {
+            toDo++
+            load(SCENE, function () {
+                FS.writeFile('scene.xml', this.responseText)
+                tryDone()
+            })
+        } else {
+            FS.writeFile('scene.xml', SCENE)
+        }
 
         INCLUDES.forEach(function (include) {
             load(include, function () {
