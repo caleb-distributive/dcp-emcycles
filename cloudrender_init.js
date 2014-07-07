@@ -34,7 +34,9 @@ Module = {
             h: h,
             pix: pix
         });
-    }
+    },
+
+    TOTAL_MEMORY: 256 * 1024 * 1024 // 64mb
 }
 
 function load(url, cb) {
