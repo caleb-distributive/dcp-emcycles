@@ -20,6 +20,8 @@
 
 #include "util_algorithm.h"
 
+#include <emscripten.h>
+
 CCL_NAMESPACE_BEGIN
 
 TileManager::TileManager(bool progressive_, int samples_, int tile_size_, int min_size_)
@@ -78,16 +80,36 @@ void TileManager::set_tiles()
 
 	state.tiles.clear();
 
-	for(int tile_y = 0; tile_y < tile_h; tile_y++) {
-		for(int tile_x = 0; tile_x < tile_w; tile_x++) {
-			int x = tile_x * sub_w;
-			int y = tile_y * sub_h;
-			int w = (tile_x == tile_w-1)? image_w - x: sub_w;
-			int h = (tile_y == tile_h-1)? image_h - y: sub_h;
+        if (EM_ASM_INT({ return +(typeof Module.tileX !== 'undefined') }, 0)) {
+            int x = EM_ASM_INT({
+                return Module.tileX
+            }, 0);
+            int y = EM_ASM_INT({
+                return Module.tileY
+            }, 0);
 
-			state.tiles.push_back(Tile(x, y, w, h));
-		}
-	}
+            int w = EM_ASM_INT({
+                return Module.tileW
+            }, 0);
+
+            int h = EM_ASM_INT({
+                return Module.tileH;
+            }, 0);
+
+            state.tiles.push_back(Tile(x, y, w, h));
+        } else {
+            for(int tile_y = 0; tile_y < tile_h; tile_y++) {
+                    for(int tile_x = 0; tile_x < tile_w; tile_x++) {
+                            int tile_id = (tile_w * tile_y) + tile_x;
+                            int x = tile_x * sub_w;
+                            int y = tile_y * sub_h;
+                            int w = (tile_x == tile_w-1)? image_w - x: sub_w;
+                            int h = (tile_y == tile_h-1)? image_h - y: sub_h;
+
+                            state.tiles.push_back(Tile(x, y, w, h));
+                    }
+            }
+        }
 
 	state.buffer.width = image_w;
 	state.buffer.height = image_h;
