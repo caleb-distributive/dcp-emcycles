@@ -399,7 +399,9 @@ int main(int argc, const char **argv)
 #endif
 
   EM_ASM_INT({
-    console.time('program');
+    if (console && console.time) {
+        console.time('program');
+    }
   }, 0);
 
 	path_init("../build/bin/2.59/scripts/addons/cycles/");
@@ -422,7 +424,9 @@ int main(int argc, const char **argv)
   SDL_Quit();
 #endif
   EM_ASM_INT({
-    console.timeEnd('program')
+    if (console && console.time) {
+        console.timeEnd('program')
+    }
   }, 0);
 	return 0;
 }
