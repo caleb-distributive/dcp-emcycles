@@ -16,8 +16,6 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <emscripten.h>
-
 #include <stdio.h>
 
 #include "buffers.h"
@@ -37,6 +35,8 @@
 #include "util_param.h"
 
 #include "cycles_xml.h"
+
+#include <emscripten.h>
 
 #undef function_bind
 #define function_bind(x) (x)
