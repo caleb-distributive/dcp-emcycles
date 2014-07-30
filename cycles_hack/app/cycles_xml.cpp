@@ -21,6 +21,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
+#include <emscripten.h>
 
 #include "camera.h"
 #include "film.h"
@@ -232,6 +233,13 @@ static void xml_read_film(const XMLReadState& state, pugi::xml_node node)
 
 	float aspect = (float)cam->width/(float)cam->height;
 
+        float tileW = (float) EM_ASM_INT({ return Module.tileW || 0; }, 0);
+        float tileH = (float) EM_ASM_INT({ return Module.tileH || 0; }, 0);
+        float tileX = (float) EM_ASM_INT({ return Module.tileX || 0; }, 0);
+        float tileY = (float) EM_ASM_INT({ return Module.tileY || 0; }, 0);
+
+        printf("%f %f %f %f\n", tileX, tileY, tileH, tileW);
+
 	if(cam->width >= cam->height) {
 		cam->left = -aspect;
 		cam->right = aspect;
@@ -244,6 +252,35 @@ static void xml_read_film(const XMLReadState& state, pugi::xml_node node)
 		cam->bottom = -1.0f/aspect;
 		cam->top = 1.0f/aspect;
 	}
+
+        if(tileH && tileW){
+            float cam_w = cam->right - cam->left;
+            float cam_h = cam->top - cam->bottom;
+
+            float tile_l = (tileX / (float)cam->width)  * cam_w;
+            float tile_b = (tileY / (float)cam->height) * cam_h;
+            float tile_r = (tileW / (float)cam->width)  * cam_w;
+            float tile_t = (tileH / (float)cam->height) * cam_h;
+
+            cam->left += tile_l;
+            cam->right = cam->left + tile_r;
+            cam->bottom += tile_b;
+            cam->top = cam->bottom + tile_t;
+
+            cam->width = (int)tileW;
+            cam->height = (int)tileH;
+
+            printf("camera set to a tile: "
+                "left %f, right %f, top %f, bottom %f "
+                "(height %d, width %d)\n"
+                , cam->left
+                , cam->right
+                , cam->top
+                , cam->bottom
+                , cam->height
+                , cam->width
+            );
+        }
 
 	cam->need_update = true;
 	cam->update();

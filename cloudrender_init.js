@@ -5,6 +5,14 @@ if (typeof Module !== 'undefined') var outerModule = Module
 
 Module = outerModule || {}  // It's defined again, by emscripten code
 
+/*
+Module.tileH = 30
+Module.tileW = 40
+Module.tileY = 30
+Module.tileX = 40
+/*
+*/
+
 Module.noInitialRun = true
 
 Module.draw_out = Module.draw_out || function (mem, w, h, pix) {
