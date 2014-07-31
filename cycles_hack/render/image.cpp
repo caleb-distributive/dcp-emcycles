@@ -88,8 +88,6 @@ static bool is_float_image(const string& filename)
 }
 
 int ImageManager::add_image(const string& filename, bool& is_float)
-{ return -1;
-#if 0
 {
 	Image *img;
 	size_t slot;
@@ -163,7 +161,6 @@ int ImageManager::add_image(const string& filename, bool& is_float)
 	need_update = true;
 
 	return slot;
-#endif
 }
 
 void ImageManager::remove_image(const string& filename)
@@ -211,8 +208,6 @@ void ImageManager::remove_image(const string& filename)
 #endif
 }
 bool ImageManager::file_load_image(Image *img, device_vector<uchar4>& tex_img)
-{ return false;
-#if 0
 {
 	if(img->filename == "")
 		return false;
@@ -245,11 +240,10 @@ bool ImageManager::file_load_image(Image *img, device_vector<uchar4>& tex_img)
 	uchar *pixels = (uchar*)tex_img.resize(width, height);
 	int scanlinesize = width*components*sizeof(uchar);
 
-	in->read_image(TypeDesc::UINT8,
-		(uchar*)pixels + (height-1)*scanlinesize,
-		AutoStride,
-		-scanlinesize,
-		AutoStride);
+	in->read_reverse_y_image(
+		(uchar*)pixels,
+		scanlinesize,
+                width * height * components);
 
 	in->close();
 	delete in;
@@ -271,14 +265,14 @@ bool ImageManager::file_load_image(Image *img, device_vector<uchar4>& tex_img)
 		}
 	}
 
+        
 	return true;
-#endif
 }
 
 bool ImageManager::file_load_float_image(Image *img, device_vector<float4>& tex_img)
-{ return false;
-#if 0
 {
+    return false;  // This makes every float image be a 1x1 black image.
+#if 0
 	if(img->filename == "")
 		return false;
 

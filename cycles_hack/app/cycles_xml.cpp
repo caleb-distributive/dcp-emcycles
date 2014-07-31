@@ -365,6 +365,22 @@ static void xml_read_shader_graph(const XMLReadState& state, Shader *shader, pug
 			ImageTextureNode *img = new ImageTextureNode();
 
 			xml_read_string(&img->filename, node, "src");
+
+                        string inl;
+                        if (xml_read_string(&inl, node, "inline")) {
+                            EM_ASM_INT({
+                                var fname = Module.Pointer_stringify($0);
+                                var fdata = Module.Pointer_stringify($1);
+
+                                Module.images = Module.images || {};
+                                Module.images[fname] = fdata;
+
+                                console.log('Storing an image in ', fname, fdata);
+
+                                return 0;
+                            }, img->filename.c_str(), inl.c_str());
+                        }
+
 			img->filename = path_join(state.base, img->filename);
 
 			snode = img;
@@ -373,6 +389,22 @@ static void xml_read_shader_graph(const XMLReadState& state, Shader *shader, pug
 			EnvironmentTextureNode *env = new EnvironmentTextureNode();
 
 			xml_read_string(&env->filename, node, "src");
+
+                        string inl;
+                        if (xml_read_string(&inl, node, "inline")) {
+                            EM_ASM_INT({
+                                var fname = Module.Pointer_stringify($0);
+                                var fdata = Module.Pointer_stringify($1);
+
+                                Module.images = Module.images || {};
+                                Module.images[fname] = fdata;
+
+                                console.log('Storing an image in ', fname, fdata);
+
+                                return 0;
+                            }, env->filename.c_str(), inl.c_str());
+                        }
+
 			env->filename = path_join(state.base, env->filename);
 
 			snode = env;
