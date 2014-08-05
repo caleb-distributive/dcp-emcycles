@@ -33,7 +33,7 @@ CCL_NAMESPACE_BEGIN
 Background::Background()
 {
 	ao_factor = 0.0f;
-	ao_distance = FLT_MAX;
+	ao_distance = 0.0f;
 
 	use = true;
 
