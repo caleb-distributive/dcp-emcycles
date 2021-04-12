@@ -123,21 +123,21 @@ static void session_init()
 	//else
 	  //options.session->progress.set_update_callback(function_bind(&view_redraw));
 
-	printf("About to start\n");
+	// printf("About to start\n");
 	options.session->start();
-	printf("session_init.\n");
+	// printf("session_init.\n");
 
 	options.scene = NULL;
 }
 
 static void session_more() {
-  printf("session_more.\n");
+//   printf("session_more.\n");
   options.session->wait();
 }
  
 static void scene_init(int width, int height)
 {
-  printf("scene_init.\n");
+//   printf("scene_init.\n");
   options.scene = new Scene(options.scene_params); //, options.session_params.device);
 	xml_read_file(options.scene, options.filepath.c_str());
 	

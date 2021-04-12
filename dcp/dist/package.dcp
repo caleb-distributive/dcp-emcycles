@@ -1,0 +1,7 @@
+{
+  "name": "emcycles_dev_1",
+  "version": "0.0.2",
+  "files": {
+    "/home/hamada/DCP/emcycles/dcp/dist/emcycles_core.js": "emcycles_core.js"
+  }
+}
