@@ -1,3 +1,7 @@
 build
 js_build
 objects
+
+*node_modules/*
+*node_modules*
+*/node_modules/*

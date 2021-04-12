@@ -51,3 +51,20 @@ or to create a test html page:
 You'll need patience :-).  You'll then need to fiddle with emcc's
 various flags to get a good optimized result.  The .html needs to be
 served by a local webserver to be viewed correctly I think.
+
+
+
+
+## DCP work
+
+All of the above come from the the emcycles repo. In order to make this better for DCP, I've gone ahead and made it easier to compile (hopefully). Simplly run `./full_build.sh` after enabling and setting all your emscripten paths (`source EMSCRIPTEN/emsdk_env.sh`).
+
+Once this completes, a JS file called `emcycles_core.js` which is the core emcycles render library.
+
+
+This can be copied over into the DCP folder, where webpack can be used to webpack emcycles with some polyfills (up to your discretion). 
+
+
+`/dcp/dist`, you'll find the stuff to be able to publish the package up (For more info please talk to either Chris or Hamada).
+
+Lastly in `/dcp/dist/test`, you'll find a simple test script to try to render something small according to some info from blender. 
