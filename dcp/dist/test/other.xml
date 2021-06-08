@@ -1,0 +1,63 @@
+<cycles>
+        <background name="World">
+                <color name="Coloreefed" value="0.050876 0.050876 0.050876"/>
+                <value name="Strengtheceed" value="1.000000"/>
+                <background name="Background"/>
+                <connect from="Background Background" to="output Surface"/>
+                <connect from="Coloreefed Color" to="Background Color"/>
+                <connect from="Strengtheceed Value" to="Background Strength"/>
+        </background>
+        <shader name="Material">
+                <color name="Base Colordeaed" value="0.800000 0.800000 0.800000"/>
+                <value name="Subsurfacecbade" value="0.000000"/>
+                <color name="Subsurface Colorcbafb" value="0.800000 0.800000 0.800000"/>
+                <value name="Metallicdebce" value="0.000000"/>
+                <value name="Specularfeebf" value="0.500000"/>
+                <value name="Specular Tintdafba" value="0.000000"/>
+                <value name="Roughnessdafcd" value="0.400000"/>
+                <value name="Anisotropicaedad" value="0.000000"/>
+                <value name="Anisotropic Rotationedbfb" value="0.000000"/>
+                <value name="Sheendfacc" value="0.000000"/>
+                <value name="Sheen Tinteeaab" value="0.500000"/>
+                <value name="Clearcoatbeaeb" value="0.000000"/>
+                <value name="Clearcoat Roughnessefada" value="0.030000"/>
+                <value name="IORddaaf" value="1.450000"/>
+                <value name="Transmissiondfecc" value="0.000000"/>
+                <value name="Transmission Roughnessdcfed" value="0.000000"/>
+                <color name="Emissionaffcd" value="0.000000 0.000000 0.000000"/>
+                <value name="Emission Strengthbcedd" value="1.000000"/>
+                <value name="Alphaeaddb" value="1.000000"/>
+                <bsdf_principled name="Principled_BSDF"/>
+                <connect from="Principled_BSDF BSDF" to="output Surface"/>
+                <connect from="Base Colordeaed Color" to="Principled_BSDF BaseColor"/>
+                <connect from="Subsurfacecbade Value" to="Principled_BSDF Subsurface"/>
+                <connect from="Subsurface Colorcbafb Color" to="Principled_BSDF SubsurfaceColor"/>
+                <connect from="Metallicdebce Value" to="Principled_BSDF Metallic"/>
+                <connect from="Specularfeebf Value" to="Principled_BSDF Specular"/>
+                <connect from="Specular Tintdafba Value" to="Principled_BSDF SpecularTint"/>
+                <connect from="Roughnessdafcd Value" to="Principled_BSDF Roughness"/>
+                <connect from="Anisotropicaedad Value" to="Principled_BSDF Anisotropic"/>
+                <connect from="Anisotropic Rotationedbfb Value" to="Principled_BSDF AnisotropicRotation"/>
+                <connect from="Sheendfacc Value" to="Principled_BSDF Sheen"/>
+                <connect from="Sheen Tinteeaab Value" to="Principled_BSDF SheenTint"/>
+                <connect from="Clearcoatbeaeb Value" to="Principled_BSDF Clearcoat"/>
+                <connect from="Clearcoat Roughnessefada Value" to="Principled_BSDF ClearcoatRoughness"/>
+                <connect from="IORddaaf Value" to="Principled_BSDF IOR"/>
+                <connect from="Transmissiondfecc Value" to="Principled_BSDF Transmission"/>
+                <connect from="Transmission Roughnessdcfed Value" to="Principled_BSDF TransmissionRoughness"/>
+                <connect from="Emissionaffcd Color" to="Principled_BSDF Emission"/>
+                <connect from="Emission Strengthbcedd Value" to="Principled_BSDF EmissionStrength"/>
+                <connect from="Alphaeaddb Value" to="Principled_BSDF Alpha"/>
+        </shader>
+        <transform matrix="0.995033323764801 -0.09953707456588745 9.56483472691616e-06 0.0  -0.02403702773153782 -0.24019557237625122 0.9704001545906067 0.0  -0.09659051150083542 -0.9656009078025818 -0.24140021204948425 0.0  0.0 0.0 -10.0 1.0 ">
+                <state interpolation="smooth" shader="Material">
+                        <mesh P="1.0 1.0 1.0 1.0 1.0 -1.0 1.0 -1.0 1.0 1.0 -1.0 -1.0 -1.0 1.0 1.0 -1.0 1.0 -1.0 -1.0 -1.0 1.0 -1.0 -1.0 -1.0" nverts="4 4 4 4 4 4 " verts="0 4 6 2  3 2 6 7  7 6 4 5  5 1 3 7  1 0 2 3  5 4 0 1  "/>
+                </state>
+        </transform>
+        <transform matrix="-0.29086464643478394 0.9551711678504944 -0.05518905818462372 0.0  -0.7711008191108704 -0.1998833566904068 0.6045247316360474 0.0  0.5663931965827942 0.21839119493961334 0.7946722507476807 0.0  4.076245307922363 1.0054539442062378 5.0 1.0 ">
+                <light P="4.076245 1.005454 5.000000"/>
+        </transform>
+        <transform matrix="1.0 -0.0 -0.0 0.0  -0.0 1.0 -0.0 0.0  -0.0 -0.0 -1.0 0.0  0.0 0.0 0.0 1.0 ">
+                <camera farclip="100.0" fov="22.89519252737121" height="1080" nearclip="0.10000000149011612" sensorheight="24.0" sensorwidth="36.0" type="perspective" width="1920"/>
+        </transform>
+</cycles>

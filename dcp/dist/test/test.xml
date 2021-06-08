@@ -1,0 +1,44 @@
+<!-- FILM -->
+
+<film width="1920" height="1080" />
+
+<!-- CAMERA -->
+
+<transform matrix="0.6859206557273865 -0.0 -0.0 0.0  0.0 0.305420845746994 -0.0 0.0  -0.0 0.0 -0.44527140259742737 0.0  0.0 -0.0 0.0 1.0 ">
+	<camera farclip="100.0" fov="22.89519252737121" nearclip="0.10000000149011612" sensorheight="24.0" sensorwidth="36.0" type="perspective"/>
+</transform>
+
+<!-- SHADERS
+
+<shader name="Material">
+	<diffuse_bsdf name="Diffuse_BSDF" color="0.800000 0.800000 0.800000" roughness="0.000000">
+	<connect from="Diffuse_BSDF bsdf" to="output surface"/>
+</shader>
+-->
+
+<!-- MESHES
+<transform matrix="1.0 0.0 0.0 0.0  0.0 1.0 0.0 0.0  0.0 0.0 1.0 0.0  0.0 0.0 0.0 1.0 ">
+	<state interpolation="smooth" shader="Material">
+		<mesh P="1.0 1.0 1.0 1.0 1.0 -1.0 1.0 -1.0 1.0 1.0 -1.0 -1.0 -1.0 1.0 1.0 -1.0 1.0 -1.0 -1.0 -1.0 1.0 -1.0 -1.0 -1.0" nverts="4 4 4 4 4 4 " verts="0 4 6 2  3 2 6 7  7 6 4 5  5 1 3 7  1 0 2 3  5 4 0 1  "/>
+	</state>
+</transform>
+-->
+
+<!-- BACKGROUND
+
+<background name="World">
+	<color name="Colordbdde" value="0.050876 0.050876 0.050876"/>
+	<value name="Strengthdfddc" value="1.000000"/>
+	<background name="Background"/>
+	<connect from="Background Background" to="output Surface"/>
+	<connect from="Colordbdde Color" to="Background Color"/>
+	<connect from="Strengthdfddc Value" to="Background Strength"/>
+</background>
+-->
+
+<!-- LIGHT
+
+<transform matrix="-0.29086464643478394 0.9551711678504944 -0.05518905818462372 0.0  -0.7711008191108704 -0.1998833566904068 0.6045247316360474 0.0  0.5663931965827942 0.21839119493961334 0.7946722507476807 0.0  4.076245307922363 1.0054539442062378 5.903861999511719 1.0 ">
+		<light P="4.076245 1.005454 5.903862"/>
+</transform>
+-->

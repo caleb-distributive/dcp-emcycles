@@ -1,0 +1,23 @@
+<!-- FILM -->
+
+<film width="1920" height="1080" />
+
+<!-- CAMERA -->
+<transform matrix="1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1">
+    <camera type="perspective" fov="70" focaldistance="10" height="1080" width="1920"/>
+</transform>
+<!-- SHADERS -->
+
+<shader name="Material">
+	<diffuse_bsdf name="diffuse" color="0.8 0.8 0.8" roughness="0"/>
+	<connect from="diffuse bsdf" to="output surface" />
+</shader>
+
+<!-- MESHES -->
+<transform matrix="1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1" translate="0 -10 0">
+		<state shader="Material">
+
+<mesh P="1.0 1.0 1.0 1.0 1.0 -1.0 1.0 -1.0 1.0 1.0 -1.0 -1.0 -1.0 1.0 1.0 -1.0 1.0 -1.0 -1.0 -1.0 1.0 -1.0 -1.0 -1.0" nverts="4 4 4 4 4 4 " verts="0 4 6 2  3 2 6 7  7 6 4 5  5 1 3 7  1 0 2 3  5 4 0 1  "/>
+
+		</state>
+</transform>
