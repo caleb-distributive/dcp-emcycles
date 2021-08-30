@@ -1,11 +1,11 @@
 const process = require('process');
 const fs = require('fs');
 const { resolve } = require('path');
-const SCENE = fs.readFileSync('./elephant.xml').toString('utf8');
-const IMAGE_WIDTH = 640;
-const IMAGE_HEIGHT = 480;
+const SCENE = fs.readFileSync('./test1.xml').toString('utf8');
+const IMAGE_WIDTH = 1920;
+const IMAGE_HEIGHT = 1080;
 var job;
-const SCHEDULER = 'https://scheduler-v3.distributed.computer'
+const SCHEDULER = 'https://scheduler.distributed.computer'
 
 async function main(){
   
@@ -14,7 +14,7 @@ async function main(){
 
   const compute = require('dcp/compute');
   const wallet = require('dcp/wallet');
-  const dcpCli = require('dcp/dcp-cli');
+  const dcpCli = require('dcp/cli');
 
   const argv = dcpCli.base([
     '\x1b[33mThis application is for testing.\x1b[37m'
@@ -41,8 +41,8 @@ async function main(){
   job = compute.for([...Array(numWorkers).keys()],async function(sim_id, SCENE){
     progress();
     var info = {
-      tileH: 480,
-      tileW: 640,
+      tileH: 1080,
+      tileW: 1920,
       tileY: 0,
       tileX: 0
     };
@@ -94,6 +94,7 @@ async function main(){
 
   //job.requirements.environment.offscreenCanvas = false;
 
+  job.computeGroups = [{joinKey: "aitf", joinSecret: "9YDEXdihud"}]
   job.requires('emcycles_dev_1/emcycles_core');
   let results = await job.exec( compute.marketValue, accountKeystore);
   console.log("Done!");
@@ -128,6 +129,7 @@ async function main(){
         img.write('test.png', (err) => {
           if (err) throw err;
         });
+      console.log("image saved!")
       });
 };
 

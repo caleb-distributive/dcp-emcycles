@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dcp-client": "^3.2.2",
+    "dcp-client": "^4.1.8",
     "jimp": "^0.16.1"
   }
 }
